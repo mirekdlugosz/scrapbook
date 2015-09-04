@@ -4,6 +4,9 @@ import re
 import sys
 import csv
 
+def trim(string):
+    return re.sub(r'\s+', ' ', string.strip())
+
 class TopList():
     def __init__(self, filename):
         self.filename = filename
@@ -27,8 +30,8 @@ class TopList():
                 ).match(line)
             if not elems:
                 continue
-            self.content.append([elems.group(1), elems.group(2), elems.group(3), 
-                elems.group(4), elems.group(5), elems.group(6), elems.group(7)])
+
+            self.content.append([trim(e) for e in elems.groups()])
 
     def writeCSV(self, where):
         csvfile = where
