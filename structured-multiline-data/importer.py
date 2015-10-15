@@ -35,7 +35,7 @@ class TopList():
 
     def writeCSV(self, where):
         csvfile = where
-        writer = csv.writer(csvfile, delimiter=';')
+        writer = csv.writer(csvfile, delimiter=';', lineterminator=os.linesep)
         writer.writerows(self.content)
 
 for filename in sys.argv[1:]:
