@@ -2,6 +2,7 @@
 
 import re
 import sys
+import os
 import csv
 
 def trim(string):
@@ -17,6 +18,7 @@ class TopList():
 
     def read(self):
         fileContent = open(self.filename, 'r').read()
+        fileContent = re.sub(r'\n(\t {5}(?! ))', '', fileContent)
         fileContent = re.sub(r'\n(\t? {4,})', '\t', fileContent)
         for line in fileContent.split('\n'):
             elems = re.compile(
