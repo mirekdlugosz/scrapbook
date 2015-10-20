@@ -10,7 +10,7 @@ delimiters <- grepl("------", singles_file, fixed = TRUE)
 singles_file <- singles_file[! delimiters]
 
 parse_record <- function(x) {
-  if (length(x)) {
+  if (length(x) > 2) {
     begin <- grepl("^\\t\\s{5}\\S", x)
     begin[1] <- TRUE
     x <- gsub("^\\s+|\\s+$", "", x)
