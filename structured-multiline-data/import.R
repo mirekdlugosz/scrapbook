@@ -28,13 +28,10 @@ parse_record <- function(x) {
   return(c(first, second))
 }
 
-parsed <- tapply(singles_file, 
-                 cumsum(grepl("^\\s?[0-9]", singles_file)),
+parsed <- sapply(split(singles_file,
+                       cumsum(grepl("^\\s?[0-9]", singles_file))),
                  parse_record)
-
-parsed <- unlist(parsed)
-singles <- matrix(parsed, ncol = 7, byrow = TRUE)
-singles <- data.frame(singles, stringsAsFactors = FALSE)
+singles <- data.frame(t(parsed), stringsAsFactors = FALSE)
 
 singles[, c(1,2,6,7)] <- lapply(singles[, c(1,2,6,7)], as.numeric)
 colnames(singles) <- c("this.week", "last.week", "title",
