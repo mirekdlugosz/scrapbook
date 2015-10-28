@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8"/>
+<title>Medical clinics in Poznań, Nowe Miasto</title>
+<style type="text/css">
+	html { height: 100% }
+	body { height: 100%; margin: 0; padding: 0 }
+	map-canvas { height: 100%; width:100% }
+</style>
+<script src="http://maps.googleapis.com/maps/api/js?v=3.exp&amp;signed_in=true&amp;libraries=drawing"></script>
+<script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
+<script src="http://www.phoneformat.com/js/PhoneFormat.js"></script>
+<script>
+google.maps.event.addDomListener(window, 'load', function(){
+	var mapOptions = {
+		center: new google.maps.LatLng(52.39, 16.96),
+		zoom: 12,
+		mapTypeId: google.maps.MapTypeId.TERRAIN
+	};
+
+	map = new google.maps.Map(document.getElementById('map-canvas'),mapOptions);
+	var Gmarkers = [];
+
+	var infowindow = new google.maps.InfoWindow({ maxWidth: 500,maxHeight:500 });
+
+	$.getJSON("clinics.json", function(data){
+		items = data.Name.length;
+		for (var i=0; i < items; i++) {
+			var marker = new google.maps.Marker({
+				position: new google.maps.LatLng(data.lat[i], data.lon[i]),
+				title: data.Name[i],
+				map: map
+			});
+
+			var phone = data.Phone[i]
+			phone = phone.split(",")
+			for (var j=0; j < phone.length; j++) {
+				if (phone[j].substr(0, 1) === "0")
+					phone[j] = phone[j].substr(1)
+				phone[j] = formatLocal("pl", phone[j])
+			}
+			phone = phone.join(", ")
+			data.Phone[i] = phone
+
+			google.maps.event.addListener(marker, 'click', (function(marker, i) {
+				return function() {
+					infowindow.setContent(''.concat(
+								'<div id="content"><h2>', data.Name[i], '</h2>',
+								'<p><b>Address</b>: ', data.Address[i],
+								'<p><b>Phone no</b>: ',data.Phone[i],
+								'<p><b>Opening hours</b>:',
+								'<ul>',
+								'<li><b>Monday</b>: ', data.pn[i], '</li>',
+								'<li><b>Tuesday</b>: ', data.wt[i], '</li>',
+								'<li><b>Wednesday</b>: ', data.śr[i], '</li>',
+								'<li><b>Thursday</b>: ', data.czw[i], '</li>',
+								'<li><b>Friday</b>: ', data.pt[i], '</li>',
+								'</ul>',
+								'</div>'
+							));
+					infowindow.open(map, marker);
+				}
+			})(marker, i));
+			Gmarkers.push(marker);
+		}
+	})
+});
+</script>
+</head>
+<body>
+  <div id="map-canvas" style="top:0%;right:0%;width:100%;height:100%;z-index:1"></div>
+</body>
+</html>
