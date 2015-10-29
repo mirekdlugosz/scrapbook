@@ -1,5 +1,7 @@
 This tool helped me to find clinic in my close neighborhood. I had to register to new doctor when I moved to new flat. NFZ (public funder of health care here in Poland) provides [web-based clinics search engine](https://zip.nfz.gov.pl/GSL/GSL/POZ), but for some reason "Map" tab does not work on my computer. Instead of manually searching every clinic, I decided to mark all clinics in my neighborhood on single map.
 
+The results can be seen by opening `index.html` file in web browser, but some will not load local JSON file due to security reasons. You can work around this by running local HTTP server, e.g. issue command `python -m SimpleHTTPServer` in this directory and point browser to `localhost:8000`.
+
 On technical level, it uses R to extract data from HTML file, clean it up a bit and export it to JSON. Website reads that JSON and creates map with markers. Markers are click-able - popover window displays name, address, phone number and opening hours (in case that closest clinic has insane working hours).
 
 Query results from NFZ database are put in `poradnie[1-5].html` files. Results on website are loaded dynamically and there is no easy way to get them from R directly.
