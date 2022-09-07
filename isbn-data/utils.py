@@ -12,6 +12,7 @@ COMBINING_MAP = {
     "COMBINING LEFT HALF RING BELOW": "WITH ACUTE",  # technically, this is wrong
     "COMBINING DIAERESIS": "WITH DIAERESIS",
     "COMBINING CARON": "WITH CARON",
+    "COMBINING CIRCUMFLEX ACCENT": "WITH CIRCUMFLEX",
 }
 
 def sanitize_string(string):
