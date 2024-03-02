@@ -1,7 +1,7 @@
 use std::path::PathBuf;
 use std::process::ExitCode;
 
-use chrono::Months;
+use chrono::{Local, Months};
 use clap::Parser;
 use tera::{Context, Tera};
 
@@ -57,11 +57,13 @@ fn main() -> ExitCode {
     };
 
     let mut context = Context::new();
+    let current_time = Local::now();
     let prev_month = reference_date - Months::new(1);
     let next_month = reference_date + Months::new(1);
-    context.insert("this_month", reference_date.to_string().as_str());
-    context.insert("previous_month", prev_month.to_string().as_str());
-    context.insert("next_month", next_month.to_string().as_str());
+    context.insert("this_month", &reference_date.and_hms_opt(1, 0, 0).unwrap().timestamp());
+    context.insert("previous_month", &prev_month.and_hms_opt(1, 0, 0).unwrap().timestamp());
+    context.insert("next_month", &next_month.and_hms_opt(1, 0, 0).unwrap().timestamp());
+    context.insert("current_time", &current_time.timestamp());
 
     let rendered = match tera.render(template_name.as_str(), &context) {
         Ok(c) => c,
